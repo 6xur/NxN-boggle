@@ -1,4 +1,4 @@
-import math, random
+import math, random, sys
 
 
 dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO","QNUMHI","ZNHRLN","TDSTYI","TTWOOA","TLRYET","TUMIOC","EDVLRY","EDRLXI","EEGNHW","EIOTSS","ERHTWV","EENUSI"]
@@ -26,7 +26,7 @@ for i in range(len(dice)):
 
 def printBoard(board):
     for i in range(len(board)):
-        print(board[i], end = '')
+        print(board[i] + " ", end = '')
         if i % ROW_LEN == ROW_LEN - 1:
             print();
             
@@ -82,10 +82,27 @@ def main():
     board = shake(dice)
     printBoard(board)
     
-    solution = solveBoggle(board)
+    solutions = solveBoggle(board)
+    found = set()
     
-    print("Found " + str(len(solution)))
-    print(solution)
+    while(True):
+        word = input()
+        word = word.upper()
+        if word == "Q":
+            break;
+        if word in solutions:
+            found.add(word)
+        else:
+            print("'%s' is not a word." % (word))
+            
+    print("\nFound(%s):" % (len(found)))
+    print('[%s]' % ', '.join(map(str, found)))
+    print("\nSolutions(%s):" % (len(solutions)))
+    print('[%s]' % ', '.join(map(str, solutions)))
+        
+    #print(solution)
+    
+    
     
 if __name__ == '__main__':
   main()
