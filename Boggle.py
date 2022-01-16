@@ -1,108 +1,130 @@
-import math, random, sys
+import math, random, sys, time
+from typing import List, Set
+
+dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO", 
+        "QNUMHI","ZNHRLN","TDSTYI","TTWOOA",
+        "TLRYET","TUMIOC","EDVLRY","EDRLXI",
+        "EEGNHW","EIOTSS","ERHTWV","EENUSI"]
+
+all_neighbours: List[Set[int]] = []
+
+def get_row_len(prompt):
+    """
+    Asking the user for row length until they give a valid response
+
+    Parameters
+    ----------
+    prompt : string
+        default message before the input
+
+    Returns
+    -------
+    row_len : int
+        row length supplied by the user
+
+    """
+    while True:
+        value = input(prompt)
+        try:
+            row_len = int(value)
+        except ValueError:
+            print("'%s' is not a integer" % value)
+            continue
+        
+        if row_len <= 0:
+            print("Your response must be positive")
+            continue
+        else:
+            break
+    return row_len
 
 
-dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO","QNUMHI","ZNHRLN","TDSTYI","TTWOOA","TLRYET","TUMIOC","EDVLRY","EDRLXI","EEGNHW","EIOTSS","ERHTWV","EENUSI"]
-
-TESTBOARD = ['R', 'H', 'R', 'E',
-             'Y', 'P', 'C', 'S', 
-             'W', 'N', 'S', 'N',
-             'T', 'E', 'G', 'O']
-
-ROW_LEN = math.sqrt(len(dice))  # Should be 4 because we have 16 dice
-
-neighbours = []  # list of sets of neighbours
-distance = [-5, -4, -3, -1, 1, 3, 4, 5]
-for i in range(len(dice)):
-    die = set()
-    for d in distance:
-        n = i + d  # neighbour's position
-        nCol = n % ROW_LEN
-        iCol = i % ROW_LEN
-        if n >= 0 and n < len(dice) and abs(iCol - nCol) <= 1:
-            die.add(n)
-            
-    neighbours.append(die)
-
-
-def printBoard(board):
-    for i in range(len(board)):
-        print(board[i] + " ", end = '')
-        if i % ROW_LEN == ROW_LEN - 1:
-            print();
-            
-
-def shake(dice):
+def make_board(row_len):
     board = []
-    random.shuffle(dice)
-    for die in dice:
-        randFace = die[random.randrange(6)]
-        board.append(randFace)  
+    # randomly select a die for row_len**2 times
+    for i in range(row_len ** 2):
+        die = random.choice(dice)
+        # for each die, pick a random face and add it to the board
+        char = die[random.randrange(6)]
+        board.append(char)  
     return board
 
 
-def findWords(boggleWords, words, used, board, start, prefix):
-    used[start] = True  # the place we're at is used so we won't visit it again
-    
-    candidate = prefix + board[start]  # prefix is empty initially, so our candidate word is the starting letter
-    if len(candidate) >= 3 and candidate in words:  # found a real word
-        boggleWords.add(candidate)
-        #print("found one")
-    
-    # loop through all the neighbours of the start position
-    for n in neighbours[start]:
-        if not used[n]:
-            findWords(boggleWords, words, used, board, n, candidate)
-        
-    used[start] = False
-
-    
-def solveBoggle(board):
-    words = set()
-    readWords("dictionary.txt", words)
-    
-    boggleWords = set()  # the words we've found
-    used = [False] * len(dice)  # a boolean list of size 16, initially all false
-    
-    for i in range(len(dice)):
-        findWords(boggleWords, words, used, board, i, "")
-    
-    return list(boggleWords)
+def print_board(board):
+    row_len = math.sqrt(len(board))
+    for i in range(len(board)):
+        print(board[i] + " ", end = '')
+        if i % row_len == row_len - 1:
+            print();
 
 
-def readWords(filename, words):
+def set_all_neighbours(board):
+    global all_neighbours
+    row_len = math.sqrt(len(board))
+    distances = [-row_len - 1, -row_len, -row_len + 1, -1, 1, row_len - 1, row_len, row_len + 1]
+    
+    for i in range(len(board)):
+        neighbours_of_position = set()
+        for d in distances:
+            n = int(i + d)  # neighbour's position
+            n_col = n % row_len
+            i_col = i % row_len
+            if n >= 0 and n < len(board) and abs(i_col - n_col) <= 1:
+                neighbours_of_position.add(n)  
+        all_neighbours.append(neighbours_of_position)
+    
+    
+def read_words(filename, dictionary):
     with open(filename, 'r') as f:
-        for index, value in enumerate(f):
-            word = value.upper()
-            words.add(word.rstrip())
-        print("Read in " + str(index + 1) + " words, making a word set of size " + str(len(words)))
-        #print(words)
+        for index, word in enumerate(f):
+            word = word.upper()
+            dictionary.add(word.rstrip())
+        print("Read in %s words" % len(dictionary))
+
+
+def find_words(solutions, dictionary, visited, board, start, prefix):
+    # the position we're are is visited so we won't visit it again
+    visited[start] = True
+    
+    # prefix is initially empity so the candidate is the starting letter
+    candidate = prefix + board[start]
+    if len(candidate) >= 3 and candidate in dictionary: # found a valid word
+        solutions.add(candidate)
+    
+    # go through all the neighbours of the start position
+    for n in all_neighbours[start]:
+        if not visited[n]:
+            find_words(solutions, dictionary, visited, board, n, candidate)
         
-        
+    visited[start] = False
+    
+    
+def solve_boggle(board):
+    dictionary = set()
+    read_words("dictionary.txt", dictionary)
+    
+    solutions = set()
+    visited = [False] * len(board)  # a boolean list, initially all false
+    for i in range(len(board)):
+        find_words(solutions, dictionary, visited, board, i, "")
+    
+    return list(solutions)
+    
+    
 def main():
-    board = shake(dice)
-    printBoard(board)
+    row_len = get_row_len("Please enter the row length: ")
+    print()
+    board = make_board(row_len)
+    print_board(board)
+    print()
+    set_all_neighbours(board)
+    #print(all_neighbours)
     
-    solutions = solveBoggle(board)
-    found = set()
-    
-    while(True):
-        word = input()
-        word = word.upper()
-        if word == "Q":
-            break;
-        if word in solutions:
-            found.add(word)
-        else:
-            print("'%s' is not a word." % (word))
-            
-    print("\nFound(%s):" % (len(found)))
-    print('[%s]' % ', '.join(map(str, found)))
-    print("\nSolutions(%s):" % (len(solutions)))
-    print('[%s]' % ', '.join(map(str, solutions)))
-        
-    #print(solution)
-    
-    
-    
+    start = time.time()
+    solutions = solve_boggle(board)
+    stop = time.time()
+    print("time taken: %s" % (stop - start))
+    print(solutions)
+
 if __name__ == '__main__':
-  main()
+    main()
