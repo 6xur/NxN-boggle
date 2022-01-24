@@ -1,17 +1,25 @@
-import unittest, boggle
+import unittest
+import boggle
+from string import ascii_uppercase
 
 TEST_BOARD = ["L", "B", "L",
               "O", "O", "F",
               "T", "U", "D"]
 
-TEST_BOARD_ALT = ['T', 'I', 'S',
-                  'N', 'R', 'I',
-                  'S', 'T', 'I']
-
 boggle.set_all_neighbours(TEST_BOARD)
 
+
 class BoggleTest(unittest.TestCase):
-    # test suite for boggle solver
+    # test suite for boggle
+    
+    def test_make_board(self):
+        # ensure that the size of the board is equal to lenght^2
+        board = boggle.make_board(3)
+        self.assertEqual(len(board), 9)
+        # ensure that each position contains a uppercase letter
+        for letter in board:
+            self.assertIn(letter, ascii_uppercase)
+    
     
     def test_all_neighbours(self):
         for i in range(len(TEST_BOARD)):
@@ -42,6 +50,15 @@ class BoggleTest(unittest.TestCase):
         self.assertNotIn("DOLL", solutions)
         self.assertNotIn("FOOD", solutions)
         self.assertNotIn("TOLD", solutions)
+    
+    
+    def test_read_words(self):
+        dictionary = set()
+        prefixes = set()
+        boggle.read_words("dictionary.txt", dictionary, prefixes)
+        self.assertGreater(len(dictionary), 0)
+        self.assertGreater(len(prefixes), 0)
+
         
 if __name__ == '__main__':
     unittest.main()

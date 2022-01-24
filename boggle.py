@@ -1,4 +1,6 @@
-import math, random, time
+import math
+import random
+import time
 from typing import List, Set
 
 dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO", 
@@ -14,7 +16,7 @@ def get_row_len(prompt):
         try:
             row_len = int(value)
         except ValueError:
-            print("'%s' is not a integer" % value)
+            print("Your response must be an integer")
             continue
         if row_len <= 0:
             print("Your response must be positive")
@@ -30,8 +32,8 @@ def make_board(row_len):
     for i in range(row_len ** 2):
         die = random.choice(dice)
         # for each die, pick a random face and add it to the board
-        char = die[random.randrange(6)]
-        board.append(char)  
+        letter = die[random.randrange(6)]
+        board.append(letter)  
     return board
 
 
@@ -44,7 +46,6 @@ def print_board(board):
             print()
     print()
             
-
 
 def set_all_neighbours(board):
     global all_neighbours
@@ -66,7 +67,6 @@ def read_words(filename, dictionary, prefixes):
     with open(filename, 'r') as f:
         for index, word in enumerate(f):
             word = word.upper()
-            #TODO: for some reason bogglable never evaluates to true here, need to fix
             dictionary.add(word.rstrip())
             for i in range(len(word)):
                 prefixes.add(word[0:i])
@@ -127,7 +127,7 @@ def main():
     
     print_board(board)
    
-    # keep taking inquit until user quits
+    # keep taking input until user exits
     found = set()
     while(True):
         word = input().upper()
