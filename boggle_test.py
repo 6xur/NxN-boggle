@@ -4,10 +4,12 @@ TEST_BOARD = ["L", "B", "L",
               "O", "O", "F",
               "T", "U", "D"]
 
+boggle.set_all_neighbours(TEST_BOARD)
+
 class BoggleTest(unittest.TestCase):
+    # test suite for boggle solver
     
-    def test_neighbours(self):
-        boggle.set_all_neighbours(TEST_BOARD)
+    def test_all_neighbours(self):
         for i in range(len(TEST_BOARD)):
             self.assertNotIn(i, boggle.all_neighbours[i])
             self.assertNotIn(-1, boggle.all_neighbours[i])
@@ -23,18 +25,18 @@ class BoggleTest(unittest.TestCase):
         self.assertSetEqual(boggle.all_neighbours[7], {3, 4, 5, 6, 8})
         self.assertSetEqual(boggle.all_neighbours[8], {4, 5, 7})
 
-    def test_boggle(self):
-        boggle.set_all_neighbours(TEST_BOARD)
+
+    def test_solve_boggle(self):
         solutions = boggle.solve_boggle(TEST_BOARD)
-        self.assertTrue("TOD" in solutions, "Did not contain TOD")
         self.assertTrue("DUO" in solutions, "Did not contain DUO")
+        self.assertTrue("TOD" in solutions, "Did not contain TOD")
         self.assertTrue("OUT" in solutions, "Did not contain OUT")
+        self.assertTrue("BOOT" in solutions, "Did not contain BOOT")
         self.assertTrue("LOOT" in solutions, "Did not contain LOOT")
         self.assertTrue("TOOL" in solutions, "Did not contain TOOL")
-        self.assertTrue("BOOT" in solutions, "Did not contain BOOT")
         self.assertFalse("BOLD" in solutions, "Contained BOLD but should not")
-        self.assertFalse("TOLD" in solutions, "Contained TOLD but should not")
         self.assertFalse("DOLL" in solutions, "Contained DOLL but should not")  
+        self.assertFalse("TOLD" in solutions, "Contained TOLD but should not")
         
 
 if __name__ == '__main__':

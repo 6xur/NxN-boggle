@@ -26,7 +26,7 @@ def get_row_len(prompt):
 
 def make_board(row_len):
     board = []
-    # randomly select a die for row_len**2 times
+    # randomly select a die for row_len^2 times
     for i in range(row_len ** 2):
         die = random.choice(dice)
         # for each die, pick a random face and add it to the board
@@ -103,13 +103,13 @@ def main():
     print_board(board)
     print()
     set_all_neighbours(board)
-    #print(all_neighbours)
     
     start = time.time()
     solutions = solve_boggle(board)
     stop = time.time()
     print("time taken: %s seconds" % (stop - start))
     print(solutions)
+
 
 if __name__ == '__main__':
     main()
