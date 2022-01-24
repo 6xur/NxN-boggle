@@ -57,26 +57,15 @@ def set_all_neighbours(board):
             if n >= 0 and n < len(board) and abs(i_col - n_col) <= 1:
                 neighbours_of_position.add(n)  
         all_neighbours.append(neighbours_of_position)
-    
-
-def bogglable(word, board):
-    if(len(word) < 3 or len(word) > len(board)):
-        return False
-    
-    usable = board.copy()
-    for letter in word:
-        if(letter in usable):
-            usable.remove(letter)
-        else:
-            return False
-    return True
         
     
 def read_words(filename, dictionary):
     with open(filename, 'r') as f:
         for index, word in enumerate(f):
             word = word.upper()
+            #TODO: for some reason bogglable never evaluates to true here, need to fix
             dictionary.add(word.rstrip())
+                
         print("Read in %s words" % len(dictionary))
 
 
@@ -100,7 +89,6 @@ def find_words(solutions, dictionary, visited, board, start, prefix):
 def solve_boggle(board):
     dictionary = set()
     read_words("dictionary.txt", dictionary)
-    
     solutions = set()
     visited = [False] * len(board)  # a boolean list, initially all false
     for i in range(len(board)):
