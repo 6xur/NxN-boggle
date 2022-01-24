@@ -1,4 +1,4 @@
-import math, random, sys, time
+import math, random, time
 from typing import List, Set
 
 dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO", 
@@ -9,20 +9,6 @@ dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO",
 all_neighbours: List[Set[int]] = []
 
 def get_row_len(prompt):
-    """
-    Asking the user for row length until they give a valid response
-
-    Parameters
-    ----------
-    prompt : string
-        default message before the input
-
-    Returns
-    -------
-    row_len : int
-        row length supplied by the user
-
-    """
     while True:
         value = input(prompt)
         try:
@@ -30,7 +16,6 @@ def get_row_len(prompt):
         except ValueError:
             print("'%s' is not a integer" % value)
             continue
-        
         if row_len <= 0:
             print("Your response must be positive")
             continue
@@ -110,7 +95,7 @@ def solve_boggle(board):
     
     return list(solutions)
     
-    
+
 def main():
     row_len = get_row_len("Please enter the row length: ")
     print()

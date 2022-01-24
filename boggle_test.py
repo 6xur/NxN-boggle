@@ -24,19 +24,19 @@ class BoggleTest(unittest.TestCase):
         self.assertSetEqual(boggle.all_neighbours[8], {4, 5, 7})
 
     def test_boggle(self):
-        sln = boggle.solve_boggle(TEST_BOARD)
-        print("found " + str(len(sln)))
-        self.assertTrue("EGO" in sln, "Did not contain EGO")
-        self.assertTrue("SENT" in sln, "Did not contain SENT")
-        self.assertTrue("WENT" in sln, "Did not contain WENT")
-        self.assertTrue("PRESS" in sln, "Did not contain PRESS")
-        self.assertTrue("CRESS" in sln, "Did not contain CRESS")
-        self.assertTrue("ONSET" in sln, "Did not contain ONSET")
-        self.assertTrue("SONG" in sln, "Did not contain SONG")
-        self.assertFalse("WEST" in sln, "Contained WEST but should not")
-        self.assertFalse("GO" in sln, "Contained GO but should not")
-        self.assertFalse("SONGS" in sln, "Contained SONGS but should not")
-        self.assertFalse("RHETORIC" in sln, "Contained RHETORIC but should not")        
+        boggle.set_all_neighbours(TEST_BOARD)
+        solutions = boggle.solve_boggle(TEST_BOARD)
+        print(solutions)
+        self.assertTrue("TOD" in solutions, "Did not contain TOD")
+        self.assertTrue("DUO" in solutions, "Did not contain DUO")
+        self.assertTrue("OUT" in solutions, "Did not contain OUT")
+        self.assertTrue("LOOT" in solutions, "Did not contain LOOT")
+        self.assertTrue("TOOL" in solutions, "Did not contain TOOL")
+        self.assertTrue("BOOT" in solutions, "Did not contain BOOT")
+        self.assertFalse("BOB" in solutions, "Contained BOB but should not")
+        self.assertFalse("TOLD" in solutions, "Contained TOLD but should not")
+        self.assertFalse("DOLL" in solutions, "Contained DOLL but should not")  
+        
 
 if __name__ == '__main__':
     unittest.main()
