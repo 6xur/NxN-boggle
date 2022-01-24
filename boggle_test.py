@@ -26,14 +26,13 @@ class BoggleTest(unittest.TestCase):
     def test_boggle(self):
         boggle.set_all_neighbours(TEST_BOARD)
         solutions = boggle.solve_boggle(TEST_BOARD)
-        print(solutions)
         self.assertTrue("TOD" in solutions, "Did not contain TOD")
         self.assertTrue("DUO" in solutions, "Did not contain DUO")
         self.assertTrue("OUT" in solutions, "Did not contain OUT")
         self.assertTrue("LOOT" in solutions, "Did not contain LOOT")
         self.assertTrue("TOOL" in solutions, "Did not contain TOOL")
         self.assertTrue("BOOT" in solutions, "Did not contain BOOT")
-        self.assertFalse("BOB" in solutions, "Contained BOB but should not")
+        self.assertFalse("BOLD" in solutions, "Contained BOLD but should not")
         self.assertFalse("TOLD" in solutions, "Contained TOLD but should not")
         self.assertFalse("DOLL" in solutions, "Contained DOLL but should not")  
         

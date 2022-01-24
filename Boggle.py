@@ -108,7 +108,7 @@ def main():
     start = time.time()
     solutions = solve_boggle(board)
     stop = time.time()
-    print("time taken: %s" % (stop - start))
+    print("time taken: %s seconds" % (stop - start))
     print(solutions)
 
 if __name__ == '__main__':
