@@ -58,6 +58,19 @@ def set_all_neighbours(board):
                 neighbours_of_position.add(n)  
         all_neighbours.append(neighbours_of_position)
     
+
+def bogglable(word, board):
+    if(len(word) < 3 or len(word) > len(board)):
+        return False
+    
+    usable = board.copy()
+    for letter in word:
+        if(letter in usable):
+            usable.remove(letter)
+        else:
+            return False
+    return True
+        
     
 def read_words(filename, dictionary):
     with open(filename, 'r') as f:

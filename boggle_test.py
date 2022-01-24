@@ -28,16 +28,27 @@ class BoggleTest(unittest.TestCase):
 
     def test_solve_boggle(self):
         solutions = boggle.solve_boggle(TEST_BOARD)
-        self.assertTrue("DUO" in solutions, "Did not contain DUO")
-        self.assertTrue("TOD" in solutions, "Did not contain TOD")
-        self.assertTrue("OUT" in solutions, "Did not contain OUT")
-        self.assertTrue("BOOT" in solutions, "Did not contain BOOT")
-        self.assertTrue("LOOT" in solutions, "Did not contain LOOT")
-        self.assertTrue("TOOL" in solutions, "Did not contain TOOL")
-        self.assertFalse("BOLD" in solutions, "Contained BOLD but should not")
-        self.assertFalse("DOLL" in solutions, "Contained DOLL but should not")  
-        self.assertFalse("TOLD" in solutions, "Contained TOLD but should not")
-        
+        self.assertIn("DUO", solutions)
+        self.assertIn("TOD", solutions)
+        self.assertIn("OUT", solutions)
+        self.assertIn("BOOT", solutions)
+        self.assertIn("LOOT", solutions)
+        self.assertIn("LOOT", solutions)
+        self.assertNotIn("BOLD", solutions)
+        self.assertNotIn("DOLL", solutions)
+        self.assertNotIn("FOOD", solutions)
+        self.assertNotIn("TOLD", solutions)
 
+
+    def test_bogglable(self):
+        self.assertTrue(boggle.bogglable("LOB", TEST_BOARD))
+        self.assertTrue(boggle.bogglable("BOT", TEST_BOARD))
+        self.assertTrue(boggle.bogglable("BUT", TEST_BOARD))
+        self.assertFalse(boggle.bogglable("TO", TEST_BOARD))
+        self.assertFalse(boggle.bogglable("FOR", TEST_BOARD))
+        self.assertFalse(boggle.bogglable("TOT", TEST_BOARD))
+        self.assertFalse(boggle.bogglable("FRIENDSHIP", TEST_BOARD))
+        
+        
 if __name__ == '__main__':
     unittest.main()
