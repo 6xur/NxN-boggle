@@ -91,9 +91,9 @@ def read_words(filename, dictionary, prefixes):
     filename : str
         Name of the file to be read from.
     dictionary : set
-        A set of valid words.
+        The set of possible words.
     prefixes : set
-        A set of prefixes for the words.
+        The set of prefixes of possible words
     """
 
     with open(filename, 'r') as f:
@@ -105,6 +105,28 @@ def read_words(filename, dictionary, prefixes):
 
 
 def find_words(solutions, dictionary, prefixes, visited, board, start, prefix):
+    """
+    Visit each of the starting position's neighbours and add valid words to 
+    solutions.
+    
+    Parameters
+    ----------
+    solutions : set
+        The set of words found so far (which will be updated). 
+    dictionary : set
+        The set of possible words.
+    prefixes : set
+        The set of prefixes of possible words
+    visited : list
+        A list indicating for each position whether it's visited in this search.
+    board : list
+        A list of Boggle letters we're using in this game.
+    start : int
+        The position this search starts from.
+    prefix : str
+        Letters encountered so far in the current search.
+    """
+    
     # The position we're at is visited so we won't visit it again
     visited[start] = True
     
@@ -122,6 +144,21 @@ def find_words(solutions, dictionary, prefixes, visited, board, start, prefix):
     
     
 def solve_boggle(board):
+    """
+    Solve a game of Boggle.
+
+    Parameters
+    ----------
+    board : list
+        The string array representing the game to solve.
+
+    Returns
+    -------
+    list
+        The list of words found.
+
+    """
+    
     dictionary = set()
     prefixes = set()
     
