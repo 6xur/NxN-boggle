@@ -10,13 +10,13 @@ boggle.set_all_neighbours(TEST_BOARD)
 
 
 class BoggleTest(unittest.TestCase):
-    # test suite for boggle
+    # Test suite for boggle
     
     def test_make_board(self):
-        # ensure that the size of the board is equal to lenght^2
+        # Ensure that the board size is equal to (row_length * row_length)
         board = boggle.make_board(3)
         self.assertEqual(len(board), 9)
-        # ensure that each position contains a uppercase letter
+        # Ensure that each position contains a uppercase letter
         for letter in board:
             self.assertIn(letter, ascii_uppercase)
     
@@ -26,7 +26,6 @@ class BoggleTest(unittest.TestCase):
             self.assertNotIn(i, boggle.all_neighbours[i])
             self.assertNotIn(-1, boggle.all_neighbours[i])
             self.assertNotIn(16, boggle.all_neighbours[i])
-        
         self.assertSetEqual(boggle.all_neighbours[0], {1, 3, 4})
         self.assertSetEqual(boggle.all_neighbours[1], {0, 2, 3, 4, 5})
         self.assertSetEqual(boggle.all_neighbours[2], {1, 4, 5})

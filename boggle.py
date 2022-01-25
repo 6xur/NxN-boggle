@@ -28,10 +28,10 @@ def get_row_len(prompt):
 
 def make_board(row_len):
     board = []
-    # randomly select a die for row_len^2 times
+    # Randomly select a die for (row_len * row_len) times
     for i in range(row_len ** 2):
         die = random.choice(dice)
-        # for each die, pick a random face and add it to the board
+        # For each die, randomly select a face and to the board
         letter = die[random.randrange(6)]
         board.append(letter)  
     return board
@@ -48,6 +48,25 @@ def print_board(board):
             
 
 def set_all_neighbours(board):
+    """
+    Generates a list of sets of neighbours for each position.
+    
+    For a 4x4 board, we number the positions:
+        
+         0  1  2  3
+         4  5  6  7
+         8  9 10 11
+        12 13 14 15
+    
+    The neighbours of position 3 are 2, 6 and 7, while the neighbours of
+    position 6 are 1, 2, 3, 5, 7, 9, 10, and 11.
+
+    Parameters
+    ----------
+    board : list
+        A list of (row_length * row_length) Boggle letters.
+    """
+    
     global all_neighbours
     row_len = math.sqrt(len(board))
     distances = [-row_len - 1, -row_len, -row_len + 1, -1, 1, row_len - 1, row_len, row_len + 1]
@@ -55,7 +74,7 @@ def set_all_neighbours(board):
     for i in range(len(board)):
         neighbours_of_position = set()
         for d in distances:
-            n = int(i + d)  # neighbour's position
+            n = int(i + d)  # Neibhour's position
             n_col = n % row_len
             i_col = i % row_len
             if n >= 0 and n < len(board) and abs(i_col - n_col) <= 1:
@@ -64,6 +83,19 @@ def set_all_neighbours(board):
         
     
 def read_words(filename, dictionary, prefixes):
+    """
+    Load words from a file to a set and create a set of prefixes for those words
+
+    Parameters
+    ----------
+    filename : str
+        Name of the file to be read from.
+    dictionary : set
+        A set of valid words.
+    prefixes : set
+        A set of prefixes for the words.
+    """
+
     with open(filename, 'r') as f:
         for index, word in enumerate(f):
             word = word.upper()
@@ -73,17 +105,16 @@ def read_words(filename, dictionary, prefixes):
 
 
 def find_words(solutions, dictionary, prefixes, visited, board, start, prefix):
-    # the position we're are is visited so we won't visit it again
+    # The position we're at is visited so we won't visit it again
     visited[start] = True
     
-    # prefix is initially empity so the candidate is the starting letter
+    # Prefix is initially empty so the candidate equals the starting letter
     candidate = prefix + board[start]
-    if len(candidate) >= 3 and candidate in dictionary: # found a valid word
+    if len(candidate) >= 3 and candidate in dictionary: # Found a valid word
         solutions.add(candidate)
     
-    # go through all the neighbours of the start position
     if candidate in prefixes:
-        for n in all_neighbours[start]:
+        for n in all_neighbours[start]:  # Go through the neighbours of the position
             if not visited[n]:
                 find_words(solutions, dictionary, prefixes, visited, board, n, candidate)
         
@@ -97,7 +128,7 @@ def solve_boggle(board):
     read_words("dictionary.txt", dictionary, prefixes)
     
     solutions = set()
-    visited = [False] * len(board)  # a boolean list, initially all false
+    visited = [False] * len(board)  # A boolean list, initially all False
    
     for i in range(len(board)):
         find_words(solutions, dictionary, prefixes, visited, board, i, "")
@@ -112,23 +143,23 @@ def print_results(found, solutions):
     print("\nMissed(%s):" % (len(missed)))
     print('%s' % ', '.join(map(str, sorted(missed))))
     
+    
+def boggle(board, solutions):
+    """
+    Start up an interactive game of Boggle.
+    
+    Ask the user to supply one input per round and print the results after the
+    user exits.
 
-def main():
-    row_len = get_row_len("Please enter the row length: ")
-    board = make_board(row_len)
+    Parameters
+    ----------
+    board : list
+        A list of (row_length * row_length) Boggle letters.
+    solutions : list
+        A list of found Boggle Words.
+    """
     
-    set_all_neighbours(board)  # need to do this before solving boggle
-    
-    # solve boggle
-    start = time.time()
-    solutions = solve_boggle(board)
-    end = time.time()
-    print("Found %s words in %s seconds" % (len(solutions), round(end - start, 2)))
-    
-    print_board(board)
-   
-    # keep taking input until user exits
-    found = set()
+    found = set()  # The set of words found by the player
     while(True):
         word = input().upper()
         if word == "!EXIT":
@@ -150,15 +181,29 @@ def main():
                 )
             continue
         if word[0] == "!":
-            print("unknown command, type !help for a list of commands")
+            print("Unknown command, type !help for a list of commands")
             continue
         if word in solutions:
             found.add(word)
         else:
             print("'%s' is not a valid word" % word)
-            
     print_results(found, solutions)
-
+            
+        
+def main():
+    row_len = get_row_len("Please enter the length of the Boggle board: ")
+    board = make_board(row_len)
+    set_all_neighbours(board)  # Set up all neighbours before solving Boggle
+    
+    # Record the time taken to solve Boggle
+    start = time.time()
+    solutions = solve_boggle(board)
+    end = time.time()
+    print("Found %s words in %s seconds" % (len(solutions), round(end - start, 2)))
+    
+    print_board(board)
+    boggle(board, solutions)  # Prompt the player for input until they exit
+    
 
 if __name__ == '__main__':
     main()
