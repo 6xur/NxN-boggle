@@ -1,4 +1,4 @@
-# Boggle N x N (Any Size)
+# Boggle NxN (Any Size)
 
 This is a command-line Boggle game written in Python.
 
