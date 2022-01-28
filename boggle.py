@@ -10,6 +10,7 @@ dice = ["AJBBOO","AFFPSK","ANEAGE","APSHCO",
 
 all_neighbours: List[Set[int]] = []
 
+
 def get_row_len(prompt):
     while True:
         value = input(prompt)
@@ -66,7 +67,6 @@ def set_all_neighbours(board):
     board : list
         A list of (row_length * row_length) Boggle letters.
     """
-    
     global all_neighbours
     row_len = math.sqrt(len(board))
     distances = [-row_len - 1, -row_len, -row_len + 1, -1, 1, row_len - 1, row_len, row_len + 1]
@@ -95,7 +95,6 @@ def read_words(filename, dictionary, prefixes):
     prefixes : set
         The set of prefixes of possible words
     """
-
     with open(filename, 'r') as f:
         for index, word in enumerate(f):
             word = word.upper()
@@ -126,7 +125,6 @@ def find_words(solutions, dictionary, prefixes, visited, board, start, prefix):
     prefix : str
         Letters encountered so far in the current search.
     """
-    
     # The position we're at is visited so we won't visit it again
     visited[start] = True
     
@@ -158,7 +156,6 @@ def solve_boggle(board):
         The list of words found.
 
     """
-    
     dictionary = set()
     prefixes = set()
     
@@ -195,7 +192,6 @@ def boggle(board, solutions):
     solutions : list
         A list of found Boggle Words.
     """
-    
     found = set()  # The set of words found by the player
     while(True):
         word = input().upper()
