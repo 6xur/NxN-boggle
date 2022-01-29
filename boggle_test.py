@@ -12,6 +12,12 @@ boggle.set_all_neighbours(TEST_BOARD)
 class BoggleTest(unittest.TestCase):
     # Test suite for boggle
     
+    def test_read_words(self):
+        dictionary, prefixes = boggle.read_words("dictionary.txt")
+        self.assertGreater(len(dictionary), 0)
+        self.assertGreater(len(prefixes), 0)
+    
+    
     def test_make_board(self):
         # Ensure that the board size is equal to (row_length * row_length)
         board = boggle.make_board(3)
@@ -37,26 +43,19 @@ class BoggleTest(unittest.TestCase):
         self.assertSetEqual(boggle.all_neighbours[8], {4, 5, 7})
 
         
-    def test_solve_boggle(self):
+    def test_boggle_contain(self):
         solutions = boggle.solve_boggle(TEST_BOARD)
-        self.assertIn("DUO", solutions)
-        self.assertIn("TOD", solutions)
-        self.assertIn("OUT", solutions)
-        self.assertIn("BOOT", solutions)
-        self.assertIn("LOOT", solutions)
-        self.assertIn("LOOT", solutions)
-        self.assertNotIn("BOLD", solutions)
-        self.assertNotIn("DOLL", solutions)
-        self.assertNotIn("FOOD", solutions)
-        self.assertNotIn("TOLD", solutions)
+        possible_words = {"DUO", "TOD", "OUT", "LOO", "LOT", "OUD", "LOB",
+                          "BOOT", "LOOT", "FOOT", "TOFU", "FOOL", "BLOT"}
+        for word in possible_words:
+            self.assertIn(word, solutions)
     
     
-    def test_read_words(self):
-        dictionary = set()
-        prefixes = set()
-        boggle.read_words("dictionary.txt", dictionary, prefixes)
-        self.assertGreater(len(dictionary), 0)
-        self.assertGreater(len(prefixes), 0)
+    def test_boggle_not_contain(self):
+        solutions = boggle.solve_boggle(TEST_BOARD)
+        impossible_words = {"BOLD", "DOLL", "FOOD", "TOLD", "BOLT", "TOOT"}
+        for word in impossible_words:
+            self.assertNotIn(word, solutions)
 
         
 if __name__ == '__main__':

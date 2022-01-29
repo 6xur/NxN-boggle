@@ -82,7 +82,7 @@ def set_all_neighbours(board):
         all_neighbours.append(neighbours_of_position)
         
     
-def read_words(filename, dictionary, prefixes):
+def read_words(filename):
     """
     Load words from a file to a set and create a set of prefixes for those words
 
@@ -90,17 +90,25 @@ def read_words(filename, dictionary, prefixes):
     ----------
     filename : str
         Name of the file to be read from.
+
+    Returns
+    -------
     dictionary : set
         The set of possible words.
     prefixes : set
-        The set of prefixes of possible words
+        The set of prefixes of possible words.
     """
+    dictionary = set()
+    prefixes = set()
+        
     with open(filename, 'r') as f:
         for index, word in enumerate(f):
             word = word.upper()
             dictionary.add(word.rstrip())
             for i in range(len(word)):
                 prefixes.add(word[0:i])
+    
+    return dictionary, prefixes
 
 
 def find_words(solutions, dictionary, prefixes, visited, board, start, prefix):
@@ -156,10 +164,7 @@ def solve_boggle(board):
         The list of words found.
 
     """
-    dictionary = set()
-    prefixes = set()
-    
-    read_words("dictionary.txt", dictionary, prefixes)
+    dictionary, prefixes = read_words("dictionary.txt")
     
     solutions = set()
     visited = [False] * len(board)  # A boolean list, initially all False
