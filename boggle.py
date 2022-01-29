@@ -12,6 +12,19 @@ all_neighbours: List[Set[int]] = []
 
 
 def get_row_len(prompt):
+    """
+    Ask the user for input until they give a valid response.
+
+    Parameters
+    ----------
+    prompt : str
+        Display message for the user.
+
+    Returns
+    -------
+    row_len : int
+        The side length of the Boggle board.
+    """
     while True:
         value = input(prompt)
         try:
@@ -28,6 +41,19 @@ def get_row_len(prompt):
 
 
 def make_board(row_len):
+    """
+    Create a randomized Boggle board.
+
+    Parameters
+    ----------
+    row_len : int
+        Side length of the Boggle Board.
+
+    Returns
+    -------
+    board : list
+        A randomized array of 16 letters.
+    """
     board = []
     # Randomly select a die for (row_len * row_len) times
     for i in range(row_len ** 2):
@@ -39,6 +65,14 @@ def make_board(row_len):
 
 
 def print_board(board):
+    """
+    Print out the Boggle sequence in a NxN grid.
+
+    Parameters
+    ----------
+    board : list
+        A list of 16 letters.
+    """
     print()
     row_len = math.sqrt(len(board))
     for i in range(len(board)):
@@ -162,7 +196,6 @@ def solve_boggle(board):
     -------
     list
         The list of words found.
-
     """
     dictionary, prefixes = read_words("dictionary.txt")
     
@@ -176,6 +209,17 @@ def solve_boggle(board):
     
 
 def print_results(found, solutions):
+    """
+    Print out the found words and the missed words.
+
+    Parameters
+    ----------
+    found : set
+        The set of words found by the user.
+    solutions : list
+        A list of words that exist on the board.
+    """
+    print(type(solutions))
     print("\nFound(%s):" % (len(found)))
     print('%s' % ', '.join(map(str, sorted(found))))
     missed = set(solutions) - found
