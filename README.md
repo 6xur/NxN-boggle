@@ -1,8 +1,8 @@
-# Boggle NxN (Any Size)
+# NxN Boggle (Any Size)
 
 This is a command-line Boggle game written in Python.
 
-Choose whether to play with 3x3 boards, 4x4 boards or more by entering a board size. Note that large board sizes take longer to load and are difficult to read.
+Choose from 3x3 boards, 4x4 boards or more by entering a board size. Note that large board sizes take longer to load and are difficult to read.
 
 ## How to Run:
 
